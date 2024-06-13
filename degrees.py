@@ -93,27 +93,28 @@ def shortest_path(source, target):
     If no possible path, returns None.
     """
     frontier = QueueFrontier()
-    frontier.add(Node(state=source, parent=None, action=None))
+    frontier.add(Node(state=source, parent=None, action=None))  #adding root node to frontier 
 
-    explored = set()
+    explored = set()                                            #initializing empty set
 
     while not frontier.empty():
         node = frontier.remove()
-
+        # we will check if the current node is equal to the target node
+        # if it is equal
         if node.state == target:
-            path = []
-            while node.parent is not None:
-                path.append((node.action, node.state))
-                node = node.parent
-            path.reverse()
-            return path
-
+            path = []                                                               #we will set path as an empty list
+            while node.parent is not None:                                          #will iterate untill there is no parent node
+                path.append((node.action, node.state))                              #adding node's action and apth in the path list
+                node = node.parent                                                  #switching back to node's parent
+            path.reverse()                                                          #after receiving the whole path let's reverse it 
+            return path                                                             #then return the path
+        #if current node is not equal to the targert node
         explored.add(node.state)
 
-        for movie_id, person_id in neighbors_for_person(node.state):
-            if not frontier.contains_state(person_id) and person_id not in explored:
-                child = Node(state=person_id, parent=node, action=movie_id)
-                frontier.add(child)
+        for movie_id, person_id in neighbors_for_person(node.state):                #Trqaversing in the given neighbors set
+            if not frontier.contains_state(person_id) and person_id not in explored:#if the person_id is fresh
+                child = Node(state=person_id, parent=node, action=movie_id)         
+                frontier.add(child)                                                 #then will add child to the frontier
 
     return None
 
